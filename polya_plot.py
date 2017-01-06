@@ -73,38 +73,21 @@ ps = np.zeros((runDim,nWalk))
 
 for nd in range(runDim):
     for i in range(nWalk):
-    
         # increase escape point and resample
         maxWalk = minWalk + dWalk * i
         nsteps = walk_spectrum(nd + 1, graphLen, numTries, maxWalk)
 
-        # count the number of trapped values
-        nlt = 0
-        for n in nsteps:
-            if n < maxWalk:
-                nlt += 1
-
-        # percentage of trap/escape
-        u = np.float(nlt) / np.float(numTries)
-        pescape = 1.0 - u
-
-        # record the percentage of escapes
-        #ps[nd][i] = pescape
         ps[nd][i] = np.mean(nsteps)
         ws[i] = maxWalk
 
 
 #plotting
 
-
-#print '{0:10e} , {1:10e}'.format(u, pescape)
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
 for nd in range(runDim):
     ax.plot(ws, ps[nd], label='dim = {0}'.format(nd+1))
-#ax.hist(nsteps, walkLen, normed=1)
-#ax.set_yscale("log")
 ax.set_xlabel('escape value')
 ax.set_ylabel('avg. steps until return')
 ax.set_title('Demonstration of Polya\'s Recurrence Theorem')
